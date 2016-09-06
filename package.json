@@ -1,0 +1,56 @@
+{
+    "name": "markdown-img-paste",
+    "main": "./lib/markdown-img-paste",
+    "version": "0.1.0",
+    "description": "一个可以快速粘贴剪贴板里的照片到markdown的插件，并且可以设置使用七牛存储照片。",
+    "keywords": ["markdown","md","image","paste"
+    ],
+    "activationCommands": {
+    "atom-workspace": "markdown-img-paste:paste"
+    },
+    "repository": "https://github.com/cocoakekeyu/markdown-img-paste",
+    "license": "MIT",
+    "engines": {
+        "atom": ">=1.0.0 <2.0.0"
+    },
+    "dependencies": {
+    },
+    "configSchema": {
+        "only_markdown": {
+            "type": "boolean",
+            "default": true,
+            "title": "仅在markdown中启用插件",
+            "description": ""
+        },
+        "upload_to_qiniu": {
+          "type": "boolean",
+          "default": false,
+          "title": "使用七牛空间存储插入的图片",
+          "description": ""
+        },
+        "zAccessKey": {
+          "type": "string",
+          "default": "",
+          "title": "AccessKey",
+          "description": ""
+        },
+        "zSecretKey": {
+          "type": "string",
+          "default": "",
+          "title": "SecretKey",
+          "description": ""
+        },
+        "zbucket": {
+          "type": "string",
+          "default": "",
+          "title": "空间名称",
+          "description": ""
+        },
+        "zdomain": {
+          "type": "string",
+          "default": "http://",
+          "title": "域名",
+          "description": ""
+        }
+    }
+}
