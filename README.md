@@ -1,21 +1,25 @@
-# markdown-img-paste
+# Markdown-img-paste
 
-## 用法
+## Usage
 
-在编辑markdown中使用快捷键`ctrl+shft+v`粘贴系统剪切板的图片。
+1. take a screenshot or copy a image
+2. hit `ctrl+shft+v` to paste image into markdown
 
+By default, the image will store in current directory. But you can change like this:
 ![](http://7xpcbe.com1.z0.glb.clouddn.com/markdown-img-paste.gif)
 
-## 插件设置
+## Setting
 
-设置使用七牛空间存储插入的图片后，会自动将图片上传至七牛服务器。
+### Only in markdown grammar to enable the plugin
 
-如果没有七牛帐号需要去[https://qiniu.com](https://qiniu.com)申请。
+If not, you can paste markdown image in any file.
 
-新申请一个空间，建议空间名用英文。选择该空间后，可以看到七牛免费提供了一个域名。
+### Use sm.ms for image link
 
-`AccessKey/SecretKey`在七牛个人面板下的密钥管理中。
+sm.ms is a free web for upload image without an account.
 
-四个属性都获得后在插件设置里依次填入。
+### Use qiniu for image link
+
+If you have a qiniu account[(https://qiniu.com)](https://qiniu.com), you can upload image to qiniu server by setting the following four parameters.
 
 ![](http://7xpcbe.com1.z0.glb.clouddn.com/markdown_setting.png))

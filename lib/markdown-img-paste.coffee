@@ -3,7 +3,7 @@
 clipboard = require 'clipboard'
 qiniu = require 'qiniu'
 fs = require 'fs'
-clipboard = require 'clipboard'
+request = require 'request'
 
 module.exports =
     subscriptions : null
@@ -18,7 +18,6 @@ module.exports =
 
     paste : ->
         if !cursor = atom.workspace.getActiveTextEditor() then return
-
         #只在markdown中使用
         if atom.config.get 'markdown-img-paste.only_markdown'
             if !grammar = cursor.getGrammar() then return
@@ -36,11 +35,37 @@ module.exports =
 
         filename = "markdown-img-paste-#{new Date().format()}.png"
         fullname = join(dirname(cursor.getPath()), filename)
-
         fs.writeFile fullname, img.toPng()
 
+        #上传至sm.ms
+        if atom.config.get 'markdown-img-paste.upload_to_mssm'
+            options =
+                uri: 'https://sm.ms/api/upload'
+                formData:
+                    smfile: fs.createReadStream fullname
+
+            request.post options, (err, response, body) ->
+                if err
+                    atom.notifications.addError 'Upload failed:' + err
+                else
+                    body = JSON.parse body
+                    if body.code == 'error'
+                        atom.notifications.addError 'Upload failed:' + body.msg
+                    else
+                        atom.notifications.addSuccess 'OK, image upload to sm.ms!'
+                        mdtext = '![](' + body.data.url + ')'
+                        paste_mdtext cursor, mdtext
+                        fs.unlink fullname, (err) ->
+                            if err
+                                console.log '未删除本地文件:'+ fullname
+            #完成
+            return
+
+
+        #保存在本地
         if !atom.config.get('markdown-img-paste.upload_to_qiniu')
-            cursor.insertText '![](' + filename + ')'
+            mdtext = '![](' + filename + ')'
+            paste_mdtext cursor, mdtext
 
         #使用七牛存储图片
         else
@@ -74,19 +99,27 @@ module.exports =
                     if !err
                         #上传成功， 处理返回值
                         #console.log(ret.hash, ret.key, ret.persistentId);
-                        atom.notifications.addSuccess 'OK,图片已上传至七牛空间!'
+                        atom.notifications.addSuccess 'OK, image upload to qinniu!'
                         fs.unlink fullname, (err) ->
                             if err
                                 console.log '未删除本地文件:'+ fullname
 
                         pastepath =  domain + '/' +  filename
-                        cursor.insertText '![](' + pastepath + ')'
+                        mdtext = '![](' + pastepath + ')'
+                        paste_mdtext cursor, mdtext
                     else
                         #上传失败， 处理返回代码
-                        console.log(err);
+                        atom.notifications.addError 'Upload Failed:' + err
 
             #调用uploadFile上传
             uploadFile token, key, filePath
+
+paste_mdtext = (cursor, mdtext) ->
+    cursor.insertText mdtext
+    position = cursor.getCursorBufferPosition()
+    position.column = position.column - mdtext.length + 2
+    cursor.setCursorBufferPosition position
+
 
 Date.prototype.format = ->
 

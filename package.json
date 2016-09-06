@@ -2,7 +2,7 @@
   "name": "markdown-img-paste",
   "main": "./lib/markdown-img-paste",
   "version": "0.2.0",
-  "description": "一个可以快速粘贴剪贴板里的照片到markdown的插件，并且可以设置使用七牛存储照片。",
+  "description": "Just use 'ctrl+shfit+v' paste image into markdown",
   "keywords": [
     "markdown",
     "md",
@@ -17,18 +17,23 @@
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
-  "dependencies": {},
   "configSchema": {
     "only_markdown": {
       "type": "boolean",
       "default": true,
-      "title": "仅在markdown中启用插件",
+      "title": "Only in markdown grammar to enable the plugin",
+      "description": ""
+    },
+    "upload_to_mssm": {
+      "type": "boolean",
+      "default": false,
+      "title": "Use sm.ms for image link",
       "description": ""
     },
     "upload_to_qiniu": {
       "type": "boolean",
       "default": false,
-      "title": "使用七牛空间存储插入的图片",
+      "title": "Use qiniu for image link",
       "description": ""
     },
     "zAccessKey": {
@@ -46,13 +51,13 @@
     "zbucket": {
       "type": "string",
       "default": "",
-      "title": "空间名称",
+      "title": "Bucket",
       "description": ""
     },
     "zdomain": {
       "type": "string",
       "default": "http://",
-      "title": "域名",
+      "title": "Domain",
       "description": ""
     }
   }
