@@ -99,7 +99,7 @@ module.exports =
                     if !err
                         #上传成功， 处理返回值
                         #console.log(ret.hash, ret.key, ret.persistentId);
-                        atom.notifications.addSuccess 'OK, image upload to qinniu!'
+                        atom.notifications.addSuccess 'OK, image upload to qiniu!'
                         fs.unlink fullname, (err) ->
                             if err
                                 console.log '未删除本地文件:'+ fullname
