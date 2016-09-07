@@ -1,3 +1,5 @@
+## 0.3.2
+- Fix the asynchronous writeFile bug
 ## 0.3.1
 - Fix wrong notifications
 ## 0.3.0

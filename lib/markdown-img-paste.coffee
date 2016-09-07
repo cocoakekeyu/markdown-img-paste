@@ -1,9 +1,8 @@
 {CompositeDisposable} = require 'atom'
 {dirname, join} = require 'path'
 clipboard = require 'clipboard'
-qiniu = require 'qiniu'
 fs = require 'fs'
-request = require 'request'
+
 
 module.exports =
     subscriptions : null
@@ -35,10 +34,12 @@ module.exports =
 
         filename = "markdown-img-paste-#{new Date().format()}.png"
         fullname = join(dirname(cursor.getPath()), filename)
-        fs.writeFile fullname, img.toPng()
+        fs.writeFileSync fullname, img.toPng()
 
         #上传至sm.ms
         if atom.config.get 'markdown-img-paste.upload_to_mssm'
+            request = require 'request'
+
             options =
                 uri: 'https://sm.ms/api/upload'
                 formData:
@@ -55,9 +56,9 @@ module.exports =
                         atom.notifications.addSuccess 'OK, image upload to sm.ms!'
                         mdtext = '![](' + body.data.url + ')'
                         paste_mdtext cursor, mdtext
-                        fs.unlink fullname, (err) ->
-                            if err
-                                console.log '未删除本地文件:'+ fullname
+
+            delete_file(fullname)
+
             #完成
             return
 
@@ -69,6 +70,8 @@ module.exports =
 
         #使用七牛存储图片
         else
+            qiniu = require 'qiniu'
+
             qiniu.conf.ACCESS_KEY = atom.config.get 'markdown-img-paste.zAccessKey'
             qiniu.conf.SECRET_KEY = atom.config.get 'markdown-img-paste.zSecretKey'
 
@@ -100,9 +103,6 @@ module.exports =
                         #上传成功， 处理返回值
                         #console.log(ret.hash, ret.key, ret.persistentId);
                         atom.notifications.addSuccess 'OK, image upload to qiniu!'
-                        fs.unlink fullname, (err) ->
-                            if err
-                                console.log '未删除本地文件:'+ fullname
 
                         pastepath =  domain + '/' +  filename
                         mdtext = '![](' + pastepath + ')'
@@ -113,6 +113,14 @@ module.exports =
 
             #调用uploadFile上传
             uploadFile token, key, filePath
+
+            delete_file fullname
+
+#辅助函数
+delete_file = (file_path) ->
+    fs.unlink file_path, (err) ->
+        if err
+            console.log '未删除本地文件:'+ fullname
 
 paste_mdtext = (cursor, mdtext) ->
     cursor.insertText mdtext
