@@ -32,8 +32,26 @@ module.exports =
         img = clipboard.readImage()
         if img.isEmpty() then return
 
+        #Sets filename based on datetime
         filename = "markdown-img-paste-#{new Date().format()}.png"
-        fullname = join(dirname(cursor.getPath()), filename)
+
+        #Sets up image assets folder
+        curDirectory = dirname(cursor.getPath())
+        fullname = join(curDirectory, filename)
+
+        #Checks if assets folder is to be used
+        if atom.config.get 'markdown-img-paste.use_assets_folder'
+          #Finds assets directory path
+          assetsDirectory = join(curDirectory, "assets") + "/"
+
+          #Creates directory if necessary
+          if !fs.existsSync assetsDirectory
+            fs.mkdirSync assetsDirectory
+          
+
+          #Sets full img path
+          fullname = join(assetsDirectory, filename)
+
         fs.writeFileSync fullname, img.toPng()
 
         #上传至sm.ms
@@ -65,7 +83,13 @@ module.exports =
 
         #保存在本地
         if !atom.config.get('markdown-img-paste.upload_to_qiniu')
-            mdtext = '![](' + filename + ')'
+            mdtext = '![]('
+
+            if atom.config.get 'markdown-img-paste.use_assets_folder'
+                mdtext += 'assets/'
+            
+            mdtext += filename + ')' 
+
             paste_mdtext cursor, mdtext
 
         #使用七牛存储图片
