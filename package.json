@@ -28,6 +28,12 @@
       "title": "Only in markdown grammar to enable the plugin",
       "description": ""
     },
+    "use_assets_folder": {
+      "type": "boolean",
+      "default": true,
+      "title": "Save images in assets folder",
+      "description": ""
+    },
     "upload_to_mssm": {
       "type": "boolean",
       "default": false,
