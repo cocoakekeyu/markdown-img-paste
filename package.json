@@ -31,7 +31,7 @@
     "use_assets_folder": {
       "type": "boolean",
       "default": true,
-      "title": "Save images in assets folder",
+      "title": "Is Save images in local assets folder",
       "description": ""
     },
     "upload_to_mssm": {
@@ -46,6 +46,12 @@
       "title": "Use qiniu for image link",
       "description": ""
     },
+    "assets_folder": {
+      "type": "string",
+      "default": "assets/images/",
+      "title": "Assets folder path",
+      "description": ""
+    },    
     "zAccessKey": {
       "type": "string",
       "default": "",

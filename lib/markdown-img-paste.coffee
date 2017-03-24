@@ -37,17 +37,16 @@ module.exports =
 
         #Sets up image assets folder
         curDirectory = dirname(cursor.getPath())
-        fullname = join(curDirectory, filename)
 
         #Checks if assets folder is to be used
         if atom.config.get 'markdown-img-paste.use_assets_folder'
           #Finds assets directory path
-          assetsDirectory = join(curDirectory, "assets") + "/"
+          assetsDirectory = join(curDirectory,atom.config.get 'markdown-img-paste.assets_folder')
 
           #Creates directory if necessary
           if !fs.existsSync assetsDirectory
             fs.mkdirSync assetsDirectory
-          
+
 
           #Sets full img path
           fullname = join(assetsDirectory, filename)
@@ -86,9 +85,9 @@ module.exports =
             mdtext = '![]('
 
             if atom.config.get 'markdown-img-paste.use_assets_folder'
-                mdtext += 'assets/'
-            
-            mdtext += filename + ')' 
+                mdtext += atom.config.get 'markdown-img-paste.assets_folder' #'assets/'
+
+            mdtext += filename + ')'
 
             paste_mdtext cursor, mdtext
 
