@@ -48,6 +48,7 @@ module.exports =
           if !fs.existsSync assetsDirectory
             fs.mkdirSync assetsDirectory
 
+
           #Sets full img path
           fullname = join(assetsDirectory, filename)
 
@@ -117,6 +118,11 @@ module.exports =
 
             #要上传文件的本地路径
             filePath = fullname
+
+            #设置上传服务器域名
+            uphost = atom.config.get 'markdown-img-paste.zuphost'
+            if uphost
+                qiniu.conf.UP_HOST = uphost
 
             #构造上传函数
             uploadFile = (uptoken, key, localFile) ->

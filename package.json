@@ -69,6 +69,12 @@
       "default": "http://",
       "title": "Domain",
       "description": ""
+    },
+    "zuphost": {
+      "type": "string",
+      "default": "http://upload.qiniu.com",
+      "title": "Uphost",
+      "description": "七牛云上传服务器域名，上传出错时可能是上传的区域服务器域名不对。默认不用设置。"
     }
   }
 }
