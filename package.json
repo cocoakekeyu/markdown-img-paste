@@ -31,8 +31,14 @@
     "use_assets_folder": {
       "type": "boolean",
       "default": true,
-      "title": "Save images in assets folder",
-      "description": ""
+      "title": "Save images in local relative assets folder",
+      "description": "save images to ./'assets folder relative path'"
+    },
+    "use_project_assets_folder": {
+      "type": "boolean",
+      "default": true,
+      "title": "Save images to project folder",
+      "description": "save images to project/'assets folder relative path'(recommend check when use jekyll)"
     },
     "upload_to_mssm": {
       "type": "boolean",
@@ -44,6 +50,12 @@
       "type": "boolean",
       "default": false,
       "title": "Use qiniu for image link",
+      "description": ""
+    },
+    "zAassets_folder": {
+      "type": "string",
+      "default": "assets/images/",
+      "title": "Assets folder relative path",
       "description": ""
     },
     "zAccessKey": {

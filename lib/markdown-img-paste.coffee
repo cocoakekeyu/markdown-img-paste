@@ -37,17 +37,20 @@ module.exports =
 
         #Sets up image assets folder
         curDirectory = dirname(cursor.getPath())
-        fullname = join(curDirectory, filename)
+        if atom.config.get 'markdown-img-paste.use_project_assets_folder'
+          projectsDirectories = atom.project.getPaths()
+          for index in projectsDirectories
+            if curDirectory.indexOf(index) >= 0
+              curDirectory = index
 
         #Checks if assets folder is to be used
         if atom.config.get 'markdown-img-paste.use_assets_folder'
           #Finds assets directory path
-          assetsDirectory = join(curDirectory, "assets") + "/"
+          assetsDirectory = join(curDirectory,atom.config.get 'markdown-img-paste.zAassets_folder')
 
           #Creates directory if necessary
           if !fs.existsSync assetsDirectory
-            fs.mkdirSync assetsDirectory
-          
+            mkdirsSync assetsDirectory
 
           #Sets full img path
           fullname = join(assetsDirectory, filename)
@@ -86,9 +89,9 @@ module.exports =
             mdtext = '![]('
 
             if atom.config.get 'markdown-img-paste.use_assets_folder'
-                mdtext += 'assets/'
-            
-            mdtext += filename + ')' 
+                mdtext += atom.config.get 'markdown-img-paste.zAassets_folder'
+
+            mdtext += filename + ')'
 
             paste_mdtext cursor, mdtext
 
@@ -151,6 +154,27 @@ paste_mdtext = (cursor, mdtext) ->
     position = cursor.getCursorBufferPosition()
     position.column = position.column - mdtext.length + 2
     cursor.setCursorBufferPosition position
+
+mkdirsSync = (dirpath, mode) ->
+  try
+    if !fs.existsSync(dirpath)
+      pathtmp = undefined
+      dirpath.split(/[/\\]/).forEach (dirname) ->
+        #这里指用/ 或\ 都可以分隔目录  如  linux的/usr/local/services   和windows的 d:\temp\aaaa
+        if pathtmp
+          pathtmp = join(pathtmp, dirname)
+        else
+          pathtmp = dirname
+        if !fs.existsSync(pathtmp)
+          if !fs.mkdirSync(pathtmp, mode)
+            return false
+        return
+    return true
+  catch e
+    console.console.error 'create director fail! path=' + dirpath + ' errorMsg:' + e
+    return false
+  return
+
 
 
 Date.prototype.format = ->
