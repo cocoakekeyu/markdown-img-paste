@@ -47,7 +47,6 @@ module.exports =
           #Creates directory if necessary
           if !fs.existsSync assetsDirectory
             fs.mkdirSync assetsDirectory
-          
 
           #Sets full img path
           fullname = join(assetsDirectory, filename)
@@ -87,8 +86,8 @@ module.exports =
 
             if atom.config.get 'markdown-img-paste.use_assets_folder'
                 mdtext += 'assets/'
-            
-            mdtext += filename + ')' 
+
+            mdtext += filename + ')'
 
             paste_mdtext cursor, mdtext
 
@@ -133,7 +132,8 @@ module.exports =
                         paste_mdtext cursor, mdtext
                     else
                         #上传失败， 处理返回代码
-                        atom.notifications.addError 'Upload Failed:' + err
+                        atom.notifications.addError 'Upload Failed:' + err.error
+                        console.log(err);
 
             #调用uploadFile上传
             uploadFile token, key, filePath
