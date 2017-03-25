@@ -18,7 +18,7 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
-    "qiniu": "^6.1.11",
+    "qiniu": "=6.1.11",
     "request": "^2.55.0"
   },
   "configSchema": {
