@@ -60,6 +60,8 @@ module.exports =
 
             options =
                 uri: 'https://sm.ms/api/upload'
+                headers:
+                    'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36'
                 formData:
                     smfile: fs.createReadStream fullname
 
@@ -67,6 +69,7 @@ module.exports =
                 if err
                     atom.notifications.addError 'Upload failed:' + err
                 else
+                    console.log(body)
                     body = JSON.parse body
                     if body.code == 'error'
                         atom.notifications.addError 'Upload failed:' + body.msg
