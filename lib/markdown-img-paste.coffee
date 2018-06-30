@@ -52,7 +52,7 @@ module.exports =
           #Sets full img path
           fullname = join(assetsDirectory, filename)
 
-        fs.writeFileSync fullname, img.toPng()
+        fs.writeFileSync fullname, img.toPNG()
 
         #上传至sm.ms
         if atom.config.get 'markdown-img-paste.upload_to_mssm'
