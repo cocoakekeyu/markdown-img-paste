@@ -52,6 +52,12 @@
       "title": "AccessKey",
       "description": ""
     },
+    "ySmmsToken": {
+      "type": "string",
+      "default": "",
+      "title": "sm.ms access token",
+      "description": ""
+    },
     "zSecretKey": {
       "type": "string",
       "default": "",

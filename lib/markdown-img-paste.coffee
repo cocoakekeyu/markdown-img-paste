@@ -56,12 +56,15 @@ module.exports =
 
         #上传至sm.ms
         if atom.config.get 'markdown-img-paste.upload_to_mssm'
+            smmsAccessToken = atom.config.get 'markdown-img-paste.ySmmsToken'
+
             request = require 'request'
 
             options =
-                uri: 'https://sm.ms/api/upload'
+                uri: 'https://sm.ms/api/v2/upload'
                 headers:
                     'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36'
+                    'Authorization': 'Basic ' + smmsAccessToken
                 formData:
                     smfile: fs.createReadStream fullname
 
@@ -71,8 +74,8 @@ module.exports =
                 else
                     console.log(body)
                     body = JSON.parse body
-                    if body.code == 'error'
-                        atom.notifications.addError 'Upload failed:' + body.msg
+                    if body.code != 'success'
+                        atom.notifications.addError 'Upload failed:' + body.message
                     else
                         atom.notifications.addSuccess 'OK, image upload to sm.ms!'
                         mdtext = '![](' + body.data.url + ')'
